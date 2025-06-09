@@ -1,68 +1,55 @@
-import { useSession, signOut } from 'next-auth/react'
-import { useState, useEffect } from 'react'
-import supabase from '@/lib/supabase'
+import { useEffect, useState } from 'react';
+import { supabase } from '../lib/supabaseClient';
+import { useRouter } from 'next/router';
 
-export default function SettingsPage() {
-  const { data: session, status } = useSession()
-  const [displayName, setDisplayName] = useState('')
-  const [background, setBackground] = useState('')
-  const [loading, setLoading] = useState(true)
+export default function Settings() {
+  const [displayName, setDisplayName] = useState('');
+  const [backgroundUrl, setBackgroundUrl] = useState('');
+  const [username, setUsername] = useState('');
+  const router = useRouter();
 
   useEffect(() => {
-    if (session) fetchProfile()
-  }, [session])
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      if (!user) return router.push('/');
+    });
+  }, []);
 
-  async function fetchProfile() {
-    setLoading(true)
-    const { data, error } = await supabase
-      .from('profiles')
-      .select('*')
-      .eq('id', session.user.id)
-      .single()
-    if (data) {
-      setDisplayName(data.displayName || '')
-      setBackground(data.background || '')
-    }
-    setLoading(false)
-  }
+  const save = async () => {
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
 
-  async function updateProfile() {
-    setLoading(true)
-    const updates = {
-      id: session.user.id,
-      username: session.user.username,
-      displayName,
-      background,
-    }
-    const { error } = await supabase.from('profiles').upsert(updates)
-    if (error) alert('Error updating profile')
-    else alert('Profile updated!')
-    setLoading(false)
-  }
+    const { error } = await supabase
+      .from('users')
+      .upsert({
+        id: user.id,
+        username,
+        displayName,
+        backgroundUrl,
+      });
 
-  if (status === 'loading') return <p>Loading...</p>
-  if (!session) return <p>Please log in.</p>
+    if (!error) router.push(`/${username}`);
+  };
 
   return (
-    <div style={{ maxWidth: 400, margin: 'auto', paddingTop: 40 }}>
-      <h2>Settings for {session.user.username}</h2>
-      <label>Display Name:</label>
+    <main>
+      <h1>Settings</h1>
       <input
+        placeholder="Custom URL (Akuma)"
+        value={username}
+        onChange={(e) => setUsername(e.target.value)}
+      />
+      <input
+        placeholder="Display Name"
         value={displayName}
         onChange={(e) => setDisplayName(e.target.value)}
-        style={{ width: '100%', marginBottom: 10 }}
       />
-      <label>Background URL:</label>
       <input
-        value={background}
-        onChange={(e) => setBackground(e.target.value)}
-        style={{ width: '100%', marginBottom: 10 }}
+        placeholder="Background Image URL"
+        value={backgroundUrl}
+        onChange={(e) => setBackgroundUrl(e.target.value)}
       />
-      <button onClick={updateProfile} disabled={loading}>
-        {loading ? 'Saving...' : 'Save'}
-      </button>
-      <hr />
-      <button onClick={() => signOut()}>Logout</button>
-    </div>
-  )
+      <button onClick={save}>Save</button>
+    </main>
+  );
 }
