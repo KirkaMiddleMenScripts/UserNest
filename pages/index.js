@@ -1,21 +1,24 @@
-import { signIn, signOut, useSession } from "next-auth/react";
-import Link from "next/link";
+import { signIn, useSession } from 'next-auth/react'
+import { useEffect } from 'react'
+import { useRouter } from 'next/router'
 
 export default function Home() {
-  const { data: session } = useSession();
+  const { data: session } = useSession()
+  const router = useRouter()
+
+  useEffect(() => {
+    if (session) router.push('/settings')
+  }, [session, router])
 
   return (
-    <main style={{ textAlign: "center", padding: "2rem" }}>
-      <h1>Custom Profile Page</h1>
-      {!session ? (
-        <button onClick={() => signIn("discord")}>Login with Discord</button>
-      ) : (
+    <div style={{textAlign: 'center', marginTop: '50px'}}>
+      {!session && (
         <>
-          <p>Welcome {session.user.name}</p>
-          <Link href="/settings"><button>Go to Settings</button></Link>
-          <button onClick={() => signOut()}>Logout</button>
+          <h1>Login with Discord</h1>
+          <button onClick={() => signIn('discord')}>Login</button>
         </>
       )}
-    </main>
-  );
+      {session && <p>Redirecting...</p>}
+    </div>
+  )
 }
