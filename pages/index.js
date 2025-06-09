@@ -1,24 +1,18 @@
-import { signIn, useSession } from 'next-auth/react'
-import { useEffect } from 'react'
-import { useRouter } from 'next/router'
+import { useEffect } from 'react';
+import { supabase } from '../lib/supabaseClient';
 
 export default function Home() {
-  const { data: session } = useSession()
-  const router = useRouter()
-
-  useEffect(() => {
-    if (session) router.push('/settings')
-  }, [session, router])
+  const login = async () => {
+    await supabase.auth.signInWithOAuth({
+      provider: 'discord',
+      options: { redirectTo: `${location.origin}/settings` }
+    });
+  };
 
   return (
-    <div style={{textAlign: 'center', marginTop: '50px'}}>
-      {!session && (
-        <>
-          <h1>Login with Discord</h1>
-          <button onClick={() => signIn('discord')}>Login</button>
-        </>
-      )}
-      {session && <p>Redirecting...</p>}
-    </div>
-  )
+    <main>
+      <h1>Login with Discord</h1>
+      <button onClick={login}>Login</button>
+    </main>
+  );
 }
