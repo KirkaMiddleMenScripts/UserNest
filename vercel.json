@@ -1,7 +1,0 @@
-{
-  "rewrites": [
-    { "source": "/", "destination": "/index.html" },
-    { "source": "/settings", "destination": "/settings.html" },
-    { "source": "/:user", "destination": "/profile.html?user=:user" }
-  ]
-}
