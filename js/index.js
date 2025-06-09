@@ -1,12 +1,26 @@
-document.getElementById('login-btn').onclick = async () => {
-  const { error } = await supabase.auth.signIn({ provider: 'discord' });
-  if (error) alert('Login error: ' + error.message);
+const log = (msg) => {
+  document.getElementById("log").textContent += `\n${msg}`;
 };
 
-supabase.auth.onAuthStateChange((event, session) => {
-  if (session) window.location.href = 'settings.html';
+document.getElementById('login-btn').addEventListener('click', async () => {
+  log("Login button clicked");
+
+  const { data, error } = await supabase.auth.signInWithOAuth({
+    provider: 'discord',
+  });
+
+  if (error) {
+    log("Error: " + error.message);
+  } else {
+    log("Redirecting to Discord...");
+  }
 });
 
-supabase.auth.getSession().then(({ data: { session } }) => {
-  if (session) window.location.href = 'settings.html';
+// Check if already logged in
+supabase.auth.getSession().then(({ data }) => {
+  if (data?.session) {
+    log("Already logged in as " + data.session.user.email);
+  } else {
+    log("Not logged in.");
+  }
 });
