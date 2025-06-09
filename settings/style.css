@@ -1,0 +1,63 @@
+body {
+  font-family: Arial, sans-serif;
+  background-color: #fafafa;
+  margin: 0;
+  padding: 1rem;
+}
+
+main {
+  max-width: 480px;
+  margin: 0 auto;
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 0 15px rgba(0,0,0,0.1);
+}
+
+label {
+  display: block;
+  margin-top: 1rem;
+  font-weight: bold;
+}
+
+input[type="text"],
+input[type="color"] {
+  margin-top: 0.3rem;
+  padding: 0.4rem;
+  width: 100%;
+  font-size: 1rem;
+  box-sizing: border-box;
+}
+
+#encoded-display-name {
+  background: #eee;
+  user-select: all;
+}
+
+button {
+  margin-top: 1.5rem;
+  padding: 0.6rem 1.2rem;
+  cursor: pointer;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+}
+
+#save-btn {
+  background-color: #28a745;
+  color: white;
+  margin-right: 1rem;
+}
+
+#save-btn:hover {
+  background-color: #218838;
+}
+
+#logout-btn {
+  background-color: #dc3545;
+  color: white;
+}
+
+#logout-btn:hover {
+  background-color: #c82333;
+}
