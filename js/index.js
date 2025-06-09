@@ -1,26 +1,8 @@
-const log = (msg) => {
-  document.getElementById("log").textContent += `\n${msg}`;
-};
+document.addEventListener("DOMContentLoaded", async () => {
+  const { data: { session } } = await supabase.auth.getSession();
+  if (session) return window.location.href = "/settings";
 
-document.getElementById('login-btn').addEventListener('click', async () => {
-  log("Login button clicked");
-
-  const { data, error } = await supabase.auth.signInWithOAuth({
-    provider: 'discord',
-  });
-
-  if (error) {
-    log("Error: " + error.message);
-  } else {
-    log("Redirecting to Discord...");
-  }
-});
-
-// Check if already logged in
-supabase.auth.getSession().then(({ data }) => {
-  if (data?.session) {
-    log("Already logged in as " + data.session.user.email);
-  } else {
-    log("Not logged in.");
-  }
+  document.getElementById("login-btn").onclick = async () => {
+    await supabase.auth.signInWithOAuth({ provider: "discord" });
+  };
 });
