@@ -2,7 +2,7 @@ import { useSession, signOut } from 'next-auth/react'
 import { useState, useEffect } from 'react'
 import supabase from '@/lib/supabase'
 
-export default function Settings() {
+export default function SettingsPage() {
   const { data: session, status } = useSession()
   const [displayName, setDisplayName] = useState('')
   const [background, setBackground] = useState('')
