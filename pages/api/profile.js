@@ -1,20 +1,18 @@
-import supabase from "@/lib/supabase";
+import { supabase } from '../../lib/supabaseClient';
 
 export default async function handler(req, res) {
-  if (req.method !== "POST") return res.status(405).end();
+  if (req.method !== 'POST') return res.status(405).end();
 
   const { id, username, displayName, background } = req.body;
 
   if (!id || !username) return res.status(400).json({ success: false });
 
-  const { error } = await supabase
-    .from("profiles")
-    .upsert({
-      id,
-      username,
-      displayName,
-      background,
-    });
+  const { error } = await supabase.from('profiles').upsert({
+    id,
+    username,
+    displayName,
+    background,
+  });
 
   if (error) return res.status(500).json({ success: false });
 
