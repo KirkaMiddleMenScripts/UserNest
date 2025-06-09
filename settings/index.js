@@ -23,7 +23,7 @@ async function loadProfile() {
   } = await supabase.auth.getSession();
 
   if (!session) {
-    window.location.href = '/login/index.html';
+    window.location.href = '/login/';
     return;
   }
 
@@ -76,7 +76,7 @@ saveBtn.addEventListener('click', async () => {
 
 logoutBtn.addEventListener('click', async () => {
   await supabase.auth.signOut();
-  window.location.href = '/login/index.html';
+  window.location.href = '/login/';
 });
 
 loadProfile();
