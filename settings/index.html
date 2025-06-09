@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Profile Settings</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main>
+    <h1>Profile Settings</h1>
+    <div id="profile-info">
+      <p><strong>Email:</strong> <span id="email"></span></p>
+
+      <label for="display-name">
+        Display Name:
+        <input type="text" id="display-name" />
+      </label>
+
+      <label for="bg-color">
+        Background Color:
+        <input type="color" id="bg-color" />
+      </label>
+
+      <div>
+        <label for="encoded-display-name">Encoded Display Name (Base64):</label>
+        <input type="text" id="encoded-display-name" readonly />
+      </div>
+
+      <button id="save-btn">Save Profile</button>
+      <button id="logout-btn">Logout</button>
+    </div>
+  </main>
+
+  <script type="module" src="index.js"></script>
+</body>
+</html>
