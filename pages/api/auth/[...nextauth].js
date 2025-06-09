@@ -1,5 +1,5 @@
-import NextAuth from "next-auth";
-import DiscordProvider from "next-auth/providers/discord";
+import NextAuth from 'next-auth'
+import DiscordProvider from 'next-auth/providers/discord'
 
 export default NextAuth({
   providers: [
@@ -9,10 +9,23 @@ export default NextAuth({
     }),
   ],
   secret: process.env.NEXTAUTH_SECRET,
+  session: {
+    strategy: 'jwt',
+  },
   callbacks: {
+    async jwt({ token, account, profile }) {
+      if (account) {
+        token.accessToken = account.access_token
+        token.id = profile.id
+        token.username = profile.username
+      }
+      return token
+    },
     async session({ session, token }) {
-      session.user.id = token.sub;
-      return session;
+      session.accessToken = token.accessToken
+      session.user.id = token.id
+      session.user.username = token.username
+      return session
     },
   },
-});
+})
