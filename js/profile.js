@@ -1,20 +1,19 @@
-const params = new URLSearchParams(window.location.search);
-const displayName = params.get('user');
+const username = new URLSearchParams(location.search).get("user");
 
-if (!displayName) {
-  document.getElementById('profile-name').textContent = 'No user specified.';
+if (!username) {
+  document.getElementById("name").textContent = "User not found.";
 } else {
   supabase
-    .from('profiles')
-    .select('*')
-    .eq('display_name', displayName)
+    .from("profiles")
+    .select("*")
+    .eq("display_name", username)
     .single()
     .then(({ data, error }) => {
       if (error || !data) {
-        document.getElementById('profile-name').textContent = 'User not found.';
+        document.getElementById("name").textContent = "User not found.";
       } else {
-        document.getElementById('profile-name').textContent = `${data.display_name}'s Profile`;
-        document.body.style.backgroundColor = data.background_color || '#fff';
+        document.getElementById("name").textContent = data.display_name;
+        document.body.style.backgroundColor = data.background_color || "#1e1e1e";
       }
     });
 }
