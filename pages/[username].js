@@ -1,41 +1,35 @@
-import supabase from '@/lib/supabase'
+import { supabase } from '../lib/supabaseClient';
 
-export async function getServerSideProps({ params }) {
-  const { username } = params
-  const { data: profile } = await supabase
-    .from('profiles')
+export async function getServerSideProps(context) {
+  const { username } = context.params;
+  const { data, error } = await supabase
+    .from('users')
     .select('*')
     .eq('username', username)
-    .single()
+    .single();
 
-  if (!profile) {
-    return {
-      notFound: true,
-    }
-  }
+  if (error || !data)
+    return { notFound: true };
 
-  return {
-    props: {
-      profile,
-    },
-  }
+  return { props: { user: data } };
 }
 
-export default function Profile({ profile }) {
+export default function UserPage({ user }) {
   return (
     <div
       style={{
-        height: '100vh',
-        background: profile.background || '#222',
-        color: '#fff',
+        backgroundImage: `url(${user.backgroundUrl || '/default-bg.jpg'})`,
+        backgroundSize: 'cover',
+        minHeight: '100vh',
+        color: 'white',
         display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
         alignItems: 'center',
+        justifyContent: 'center',
+        flexDirection: 'column'
       }}
     >
-      <h1>{profile.displayName || profile.username}</h1>
-      <p>Welcome to the profile page.</p>
+      <h1>{user.displayName || user.username}</h1>
+      <p>@{user.username}</p>
     </div>
-  )
+  );
 }
