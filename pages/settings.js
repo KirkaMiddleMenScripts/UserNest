@@ -1,42 +1,68 @@
-import { useSession } from "next-auth/react";
-import { useState } from "react";
+import { useSession, signOut } from 'next-auth/react'
+import { useState, useEffect } from 'react'
+import supabase from '@/lib/supabase'
 
 export default function Settings() {
-  const { data: session, status } = useSession();
-  const [background, setBackground] = useState("");
-  const [displayName, setDisplayName] = useState("");
-  const [customUrl, setCustomUrl] = useState("");
+  const { data: session, status } = useSession()
+  const [displayName, setDisplayName] = useState('')
+  const [background, setBackground] = useState('')
+  const [loading, setLoading] = useState(true)
 
-  if (status === "loading") return <p>Loading...</p>;
-  if (!session) return <p>You need to log in</p>;
+  useEffect(() => {
+    if (session) fetchProfile()
+  }, [session])
 
-  const save = async () => {
-    const res = await fetch("/api/profile", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        id: session.user.id,
-        username: customUrl.toLowerCase(),
-        displayName,
-        background,
-      }),
-    });
-
-    const result = await res.json();
-    if (result.success) {
-      window.location.href = `/${customUrl}`;
-    } else {
-      alert("Failed to save profile.");
+  async function fetchProfile() {
+    setLoading(true)
+    const { data, error } = await supabase
+      .from('profiles')
+      .select('*')
+      .eq('id', session.user.id)
+      .single()
+    if (data) {
+      setDisplayName(data.displayName || '')
+      setBackground(data.background || '')
     }
-  };
+    setLoading(false)
+  }
+
+  async function updateProfile() {
+    setLoading(true)
+    const updates = {
+      id: session.user.id,
+      username: session.user.username,
+      displayName,
+      background,
+    }
+    const { error } = await supabase.from('profiles').upsert(updates)
+    if (error) alert('Error updating profile')
+    else alert('Profile updated!')
+    setLoading(false)
+  }
+
+  if (status === 'loading') return <p>Loading...</p>
+  if (!session) return <p>Please log in.</p>
 
   return (
-    <div style={{ padding: 20 }}>
-      <h2>Customize Your Page</h2>
-      <input placeholder="Display Name" value={displayName} onChange={e => setDisplayName(e.target.value)} /><br />
-      <input placeholder="Custom URL (e.g. Akuma)" value={customUrl} onChange={e => setCustomUrl(e.target.value)} /><br />
-      <input placeholder="Background Image URL" value={background} onChange={e => setBackground(e.target.value)} /><br />
-      <button onClick={save}>Save</button>
+    <div style={{ maxWidth: 400, margin: 'auto', paddingTop: 40 }}>
+      <h2>Settings for {session.user.username}</h2>
+      <label>Display Name:</label>
+      <input
+        value={displayName}
+        onChange={(e) => setDisplayName(e.target.value)}
+        style={{ width: '100%', marginBottom: 10 }}
+      />
+      <label>Background URL:</label>
+      <input
+        value={background}
+        onChange={(e) => setBackground(e.target.value)}
+        style={{ width: '100%', marginBottom: 10 }}
+      />
+      <button onClick={updateProfile} disabled={loading}>
+        {loading ? 'Saving...' : 'Save'}
+      </button>
+      <hr />
+      <button onClick={() => signOut()}>Logout</button>
     </div>
-  );
+  )
 }
