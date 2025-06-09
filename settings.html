@@ -2,15 +2,16 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Settings</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <h1>Set Your Profile</h1>
-
-  <label>Display Name: <input type="text" id="displayname" /></label><br /><br />
-  <label>Background Color: <input type="color" id="bgcolor" value="#ffffff" /></label><br /><br />
-  <button id="save-btn">Save Profile</button>
+  <h1>Customize Your Profile</h1>
+  <input id="displayname" placeholder="Display Name" /><br />
+  <label>Background Color</label>
+  <input type="color" id="bgcolor" value="#1e1e1e" /><br /><br />
+  <button id="save-btn">Save</button>
   <button id="logout-btn">Logout</button>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
