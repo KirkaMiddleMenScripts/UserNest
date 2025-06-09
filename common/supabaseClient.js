@@ -1,8 +1,8 @@
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
 
 // Your Supabase keys encoded in Base64 (replace these with your own encoded keys)
-const encodedSupabaseUrl = 'aHR0cHM6Ly95b3VyLXByb2plY3Quc3VwYWJhc2UuY28='; // example
-const encodedAnonKey = 'ZXlKaGJHY2lPaUpJVXpJMU5pSXNJbXRwWkNJNkltRnVJam9pTmpBMU5UQXlOVEkyTlRJd01UQXNJbXgwYldWa0lqb2lOakUwT1RRek5ETXNJbUZ0WlNJNkltVjRjQ0k2SW5Sc1pTSTZJbE5oWkNJNkltRnVaRzUwWVhOcGJHRnlZVzFsY3k1amIyMHZZV3h6SWpwN0ltVjRjQ0k2SWpFM05UQXdOREl6TkRFaUxDSjFjbVl3SWpvaVJXVnFJaXdpYm5Wc1pTSTZJbXgwYUdWc2JDSTZJbVJoY0hCc2FXTmhkR2x2YmowaUxDSnBZWFFpT2pFMU1qZzJNVEV3TURnME9UZzVOREExTWpRdE5EVTRJaXdpY0hWaWRDSTZJbGx6YUdWdFpYTWlMQ0pwWVhRaU9pSkJNVEV4TmpZeE5ETXhNVFl3TXpnMU5UaGpNRFEwTXpFaQ=='; // example
+const encodedSupabaseUrl = 'aHR0cHM6Ly96c3RtbmF6aGdhZmVkcnpxamttbi5zdXBhYmFzZS5jbw=='; // example
+const encodedAnonKey = 'ZXlKaGJHY2lPaUpJVXpJMU5pSXNJblI1Y0NJNklrcFhWQ0o5LmV5SnBjM01pT2lKemRYQmhZbUZ6WlNJc0luSmxaaUk2SW5wemRHMXVZWHBvWjJGbVpXUnllbkZxYTIxdUlpd2ljbTlzWlNJNkltRnViMjRpTENKcFlYUWlPakUzTkRrME16UTVNRGdzSW1WNGNDSTZNakEyTlRBeE1Ea3dPSDAuRkEyZktxRnh6d21yeXMwaTNWRzJXUG52Tlk5WGhQSVN4TXN5X1MzdUpIZw=='; // example
 
 // Base64 decode function
 function base64Decode(encodedStr) {
