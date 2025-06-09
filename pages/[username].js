@@ -1,31 +1,41 @@
-import supabase from "@/lib/supabase";
+import supabase from '@/lib/supabase'
 
 export async function getServerSideProps({ params }) {
-  const { data } = await supabase
-    .from("profiles")
-    .select("*")
-    .eq("username", params.username)
-    .single();
+  const { username } = params
+  const { data: profile } = await supabase
+    .from('profiles')
+    .select('*')
+    .eq('username', username)
+    .single()
 
-  if (!data) return { notFound: true };
+  if (!profile) {
+    return {
+      notFound: true,
+    }
+  }
 
-  return { props: { profile: data } };
+  return {
+    props: {
+      profile,
+    },
+  }
 }
 
 export default function Profile({ profile }) {
   return (
     <div
       style={{
-        backgroundImage: `url(${profile.background})`,
-        backgroundSize: "cover",
-        minHeight: "100vh",
-        color: "white",
-        textShadow: "0 0 4px black",
-        padding: "3rem",
+        height: '100vh',
+        background: profile.background || '#222',
+        color: '#fff',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
       }}
     >
       <h1>{profile.displayName || profile.username}</h1>
-      <p>@{profile.username}</p>
+      <p>Welcome to the profile page.</p>
     </div>
-  );
+  )
 }
